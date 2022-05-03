@@ -5,3 +5,4 @@ small error percentage at much lower FLOPs.
 Link to the original paper: [ShuffleNet: An Extremely Efficient Convolutional Neural Network for Mobile Devices](https://arxiv.org/abs/1707.01083)
 
 # LightRay
+## LightRay
