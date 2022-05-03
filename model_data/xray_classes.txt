@@ -1,0 +1,5 @@
+Gun
+Knife
+Wrench
+Pliers
+Scissors
