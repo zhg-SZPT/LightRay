@@ -2,7 +2,6 @@ import math
 import torch
 import torch.nn as nn
 from torch.nn import init
-# from nets.CBAM_block import CBAMBlock, SpatialAttention, ChannelAttention
 
 
 def _make_divisible(v, divisor, min_value=None):
@@ -204,7 +203,7 @@ class MobileNetV3(nn.Module):
 def mobilenet_v3(pretrained=False, **kwargs):
     model = MobileNetV3(**kwargs)
     if pretrained:
-        state_dict = torch.load('./model_data/mobilenetv3-large-1cd25616.pth') #如果进行与训练则加载与训练模型
+        state_dict = torch.load('./model_data/') #预训练模型地址，如果进行预训练则加载预训练模型
         model.load_state_dict(state_dict, strict=True)
     return model
 

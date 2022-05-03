@@ -22,8 +22,8 @@ class YOLO(object):
         #   model_path指向logs文件夹下的权值文件，classes_path指向model_data下的txt
         #   如果出现shape不匹配，同时要注意训练时的model_path和classes_path参数的修改
         #--------------------------------------------------------------------------#
-        "model_path"        : 'model_data/Epoch200-loss2.6116-val_loss2.3804.pth',
-        "classes_path"      : 'model_data/voc_classes.txt',
+        "model_path"        : 'model_data/ ',
+        "classes_path"      : 'model_data/xray_classes.txt',
         #---------------------------------------------------------------------#
         #   anchors_path代表先验框对应的txt文件，一般不修改。
         #   anchors_mask用于帮助代码找到对应的先验框，一般不修改。
@@ -48,7 +48,7 @@ class YOLO(object):
         "nms_iou"           : 0.3,
         #---------------------------------------------------------------------#
         #   该变量用于控制是否使用letterbox_image对输入图像进行不失真的resize，
-        #   在多次测试后，发现关闭letterbox_image直接resize的效果更好
+        #   letterbox_image = False, 直接resize的效果更好
         #---------------------------------------------------------------------#
         "letterbox_image"   : False,
         #-------------------------------#
@@ -83,7 +83,7 @@ class YOLO(object):
                                                         self.anchors_mask)
 
         #---------------------------------------------------#
-        #   画框设置不同的颜色
+        #   设置不同的颜色画框
         #---------------------------------------------------#
         hsv_tuples = [(x / self.num_classes, 1., 1.) for x in range(self.num_classes)]
         self.colors = list(map(lambda x: colorsys.hsv_to_rgb(*x), hsv_tuples))

@@ -5,7 +5,7 @@ import torch.nn as nn
 
 from nets.CBAM_block import CBAMBlock
 from nets.mobilenet_v3 import mobilenet_v3
-from nets.lfpnnet import LightweightFeaturePyramidNet
+from nets.LFPN import LightweightFeaturePyramidNet
 
 
 class MobileNetV3(nn.Module):

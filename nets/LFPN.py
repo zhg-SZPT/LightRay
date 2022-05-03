@@ -96,21 +96,21 @@ class LightweightFeaturePyramidNet(nn.Module):
         super(LightweightFeaturePyramidNet, self).__init__()
         in_filters = [40, 112, 160] #为了降维，减少计算量，加卷积层后的滤镜通道从40改到160
 
-        self.fpn_conv1 = make_three_conv([512, 1024], in_filters[0])
-        self.fpn_SPP = SpatialPyramidPooling()
-        self.fpn_conv2 = make_three_conv([512, 1024], 2048)
+        self.lfpn_conv1 = make_three_conv([512, 1024], in_filters[0])
+        self.lfpn_SPP = SpatialPyramidPooling()
+        self.lfpn_conv2 = make_three_conv([512, 1024], 2048)
 
-        self.fpn_upsample1 = Upsample(512, 256)
-        self.fpn_make_five_conv1 = make_five_conv([256, 512], 256)
+        self.lfpn_upsample1 = Upsample(512, 256)
+        self.lfpn_make_five_conv1 = make_five_conv([256, 512], 256)
 
-        self.fpn_upsample2 = Upsample(256, 128)
-        self.fpn_make_five_conv2 = make_five_conv([128, 256], 128)
+        self.lfpn_upsample2 = Upsample(256, 128)
+        self.lfpn_make_five_conv2 = make_five_conv([128, 256], 128)
 
-        self.fpn_down_sample1 = conv_dw(128, 256, stride=2)
-        self.fpn_make_five_conv3 = make_five_conv([256, 512], 512)
+        self.lfpn_down_sample1 = conv_dw(128, 256, stride=2)
+        self.lfpn_make_five_conv3 = make_five_conv([256, 512], 512)
 
-        self.fpn_down_sample2 = conv_dw(256, 512, stride=2)
-        self.fpn_make_five_conv4 = make_five_conv([512, 1024], 1024)
+        self.lfpn_down_sample2 = conv_dw(256, 512, stride=2)
+        self.lfpn_make_five_conv4 = make_five_conv([512, 1024], 1024)
 
     def forward(self, x):
         #  backbone 主干网络的维度变化
