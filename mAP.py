@@ -1,5 +1,4 @@
-# ---------------   获取mAP ---------------#
-#________________  可视化过程  -------------#
+# ---------------   mAP ---------------#
 
 import os
 import xml.etree.ElementTree as ET
@@ -12,41 +11,30 @@ from util.utils import get_classes
 from util.utils_map import get_coco_map, get_map
 
 if __name__ == "__main__":
-    #-------------------------------------------------------------------------------------------------------------------#
-    # Recall和Precision不像AP是一个面积的概念，在门限值不同时，网络的Recall和Precision值是不同的。
-    # mAP计算结果中的Recall和Precision代表的是当预测时，门限置信度为0.5时，所对应的Recall和Precision值。
-    # 因为这里的门限低，所以此处获得的./map_out/detection-results/里面的txt的框的数量会比直接predict多一些
-    # 目的是为了计算不同门限条件下的Recall和Precision值，从而实现mAP的计算。
-    #-------------------------------------------------------------------------------------------------------------------#
+
     # ------------------------------------------------------------------------------------------------------------------#
-    #   map_mode用于指定该文件运行时计算的内容
-    #   map_mode为0代表整个map计算流程，包括获得预测结果、获得真实框、计算VOC_map。
-    #   map_mode为1代表仅仅获得预测结果。
-    #   map_mode为2代表仅仅获得真实框。
-    #   map_mode为3代表仅仅计算VOC_map。
-    #   map_mode为4代表利用COCO工具箱计算当前数据集的0.50:0.95map。需要获得预测结果、获得真实框后并安装pycocotools才行
+    #   map_mode is used to specify what is calculated when the file is run
+    #   map_mode = 0 represents the entire map calculation process,
+    #   including obtaining the prediction result, obtaining the real frame, and calculating the VOC_map
+    #   map_mode = 1 means that only prediction results are obtained.
+    #   map_mode = 2 means only the ground truth box is obtained.
+    #   map_mode = 3 means only VOC_map is calculated.
     # -------------------------------------------------------------------------------------------------------------------#
     map_mode = 0
-    # -------------------------------------------------------#
-    #   此处的classes_path用于指定需要测量VOC_map的类别
-    # -------------------------------------------------------#
+
     classes_path = 'model_data/xray_classes.txt'
-    # -------------------------------------------------------#
-    #   MINOVERLAP用于指定想要获得的mAP0.x
-    #   比如计算mAP0.75，可以设定MINOVERLAP = 0.75。
-    # -------------------------------------------------------#
+
+    #   MINOVERLAP is used to specify the mAP0.x you want to get
+
     MINOVERLAP = 0.5
-    # -------------------------------------------------------#
-    #   map_vis用于指定是否开启VOC_map计算的可视化
-    # -------------------------------------------------------#
+    # -------------------------------------------------------------------------------#
+    #  map_vis is used to specify whether to enable visualization of map calculations
+    # -------------------------------------------------------------------------------#
     map_vis = True
-    # -------------------------------------------------------#
-    #   指向VOC数据集所在的文件夹
-    #   默认指向根目录下的VOC数据集
-    # -------------------------------------------------------#
     Xraydevkit_path = 'Xraydevkit'
     # -------------------------------------------------------#
-    #   结果输出的文件夹，同级目录下默认的地址文件夹为map_out
+    #   The folder of the result output,
+    #   the default address folder in the same level directory is map_out
     # -------------------------------------------------------#
     map_out_path = 'map_out'
 

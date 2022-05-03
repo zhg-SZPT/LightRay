@@ -120,7 +120,6 @@ class MobileNetV3(nn.Module):
         super(MobileNetV3, self).__init__()
         # setting of inverted residual blocks
         self.cfgs = [
-            # `  k卷积核,t升维比例,c输出通道数,SE,HS选择激活函数,s判断输入图像是否进行高宽压缩
             # 208,208,16 -> 208,208,16
             [3, 1, 16, 0, 0, 1],
 
@@ -203,13 +202,13 @@ class MobileNetV3(nn.Module):
 def mobilenet_v3(pretrained=False, **kwargs):
     model = MobileNetV3(**kwargs)
     if pretrained:
-        state_dict = torch.load('./model_data/') #预训练模型地址，如果进行预训练则加载预训练模型
+        state_dict = torch.load('./model_data/') #Pre-trained model address, if pre-trained, load the pre-trained model
         model.load_state_dict(state_dict, strict=True)
     return model
 
 
 # .................................
-# 打印查看模型
+# Print and view models
 # .................................
 if __name__ == "__main__":
     import torch

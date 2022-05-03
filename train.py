@@ -1,6 +1,6 @@
-# -------------------------------------#
-#       对自己的数据集进行训练，获取模型
-# -------------------------------------#
+# -----------------------------------------------#
+#   Train your own dataset and get the model
+# -----------------------------------------------#
 import numpy as np
 import torch
 import torch.backends.cudnn as cudnn
@@ -35,36 +35,27 @@ def fit_one_epoch(model_train, model, yolo_loss, loss_history, optimizer, epoch,
                 else:
                     images = torch.from_numpy(images).type(torch.FloatTensor)
                     targets = [torch.from_numpy(ann).type(torch.FloatTensor) for ann in targets]
-            # ----------------------#
-            #   清零梯度
-            # ----------------------#
+
             optimizer.zero_grad()
-            # ----------------------#
-            #   前向传播
-            # ----------------------#
+
             outputs = model_train(images)
 
             loss_value_all = 0  # =0
             num_pos_all = 0
-            # ----------------------#
-            #   计算损失
-            # ----------------------#
+
             for l in range(len(outputs)):
                 loss_item, num_pos = yolo_loss(l, outputs[l], targets)
                 loss_value_all += loss_item
                 num_pos_all += num_pos
-            loss_value = loss_value_all / num_pos_all  # 无sum
+            loss_value = loss_value_all / num_pos_all
 
-            # ----------------------#
-            #   反向传播
-            # ----------------------#
             loss_value.backward()
             optimizer.step()
 
             loss += loss_value.item()
 
             # if Tensorboard:
-            #     # 将loss写入tensorboard，每一步都写
+            #     # Write loss to tensorboard, every step of the way
             #     writer = SummaryWriter(log_dir='logs', flush_secs=60)
             #     writer.add_scalar('Train_loss', loss, train_tensorboard_step)
             #     train_tensorboard_step += 1
@@ -73,7 +64,7 @@ def fit_one_epoch(model_train, model, yolo_loss, loss_history, optimizer, epoch,
                                 'lr': get_lr(optimizer)})
             pbar.update(1)
 
-    # 将loss写入tensorboard，下面是每个世代保存一次
+    ## Write loss to tensorboard, the following is saved once per generation
     if Tensorboard:
         # writer = SummaryWriter(log_dir='logs', flush_secs=60)
         writer.add_scalar('Train_loss', loss / (iteration + 1), epoch)
@@ -93,20 +84,14 @@ def fit_one_epoch(model_train, model, yolo_loss, loss_history, optimizer, epoch,
                 else:
                     images = torch.from_numpy(images).type(torch.FloatTensor)
                     targets = [torch.from_numpy(ann).type(torch.FloatTensor) for ann in targets]
-                # ----------------------#
-                #   清零梯度
-                # ----------------------#
+
                 optimizer.zero_grad()
-                # ----------------------#
-                #   前向传播
-                # ----------------------#
+
                 outputs = model_train(images)
 
                 loss_value_all = 0  # =0
                 num_pos_all = 0
-                # ----------------------#
-                #   计算损失
-                # ----------------------#
+
                 for l in range(len(outputs)):
                     loss_item, num_pos = yolo_loss(l, outputs[l], targets)
                     loss_value_all += loss_item
@@ -114,7 +99,7 @@ def fit_one_epoch(model_train, model, yolo_loss, loss_history, optimizer, epoch,
                 loss_value = loss_value_all / num_pos_all
                 val_loss += loss_value.item()
 
-            # 将val_loss写入tensorboard, 下面注释的是每一步都写入
+            # #Write val_loss to tensorboard, the following notes are written at each step
             # if Tensorboard:
             #     writer = SummaryWriter(log_dir='logs', flush_secs=60)
             #     writer.add_scalar('Val_loss', loss, val_tensorboard_step)
@@ -122,9 +107,9 @@ def fit_one_epoch(model_train, model, yolo_loss, loss_history, optimizer, epoch,
             pbar.set_postfix(**{'val_loss': val_loss / (iteration + 1)})
             pbar.update(1)
 
-    # 将loss写入tensorboard，每个世代保存一次
+
     if Tensorboard:
-        # writer = SummaryWriter(log_dir='logs', flush_secs=60)  #查看tensorboard的端口号
+        # writer = SummaryWriter(log_dir='logs', flush_secs=60)  #View the port of tensorboard
         writer.add_scalar('Val_loss', val_loss / (epoch_step_val + 1), epoch)
 
     loss_history.append_loss(loss / epoch_step, val_loss / epoch_step_val)
@@ -142,43 +127,30 @@ def fit_one_epoch(model_train, model, yolo_loss, loss_history, optimizer, epoch,
 
 
 if __name__ == "__main__":
-    # -------------------------------#
-    #   是否使用Tensorboard
-    # -------------------------------#
+
     Tensorboard = True
-    # -------------------------------#
-    #   是否使用Cuda 确认GPU是否满足
-    # -------------------------------#
+
     Cuda = True
-    # --------------------------------------------------------#
-    #   训练前classes_path，使其对应自己的数据集路径里面为目标类别class
-    # --------------------------------------------------------#
+    # --------------------------------------------------------------------------------------------------------#
+    #   Before training classes_path, make it correspond to its own data set path as the target category class
+    # --------------------------------------------------------------------------------------------------------#
     classes_path = 'model_data/xray_classes.txt'
     anchors_path = 'model_data/yolo_anchors.txt'
     anchors_mask = [[6, 7, 8], [3, 4, 5], [0, 1, 2]]
-    # ----------------------------------------------------------------------------------------------------------------------------#
-    #   如果想要让模型从主干的预训练权值开始训练，则设置model_path = ''，下面的pretrain = True，此时仅加载主干。
-    #   如果想要让模型从0开始训练，则设置model_path = ''，下面的pretrain = Fasle，Freeze_Train = Fasle，此时从0开始训练，且没有冻结主干的过程。
-    # ----------------------------------------------------------------------------------------------------------------------------#
-    #训练时请修改预训练权重模型
+    # -------------------------------------------------------------#
+    #    Please modify the pretrained weight model when training
+    # -------------------------------------------------------------#
     model_path = 'model_data/LightRay.pth'
-    # ------------------------------------------------------#
-    #   输入图片的shape大小，一定要是32的倍数
-    # ------------------------------------------------------#
+
     input_shape = [416, 416]
-    # -------------------------------#
-    #  主干特征提取网络mobilenetv3
-    # -------------------------------#
     backbone = "mobilenetv3"
 
-    #   如果不设置model_path，pretrained = False，Freeze_Train = Fasle，此时从0开始训练，且没有冻结主干的过程。
     pretrained = False
-    # ------------------------------------------------------#
-    #   Yolov4的一些tricks应用，本实验针对数据集没有使用
-    #   mosaic 马赛克数据增强 True or False
-    #   测试时mosaic数据增强并不稳定，所以为False
-    #   余弦退火学习率 Cosine_scheduler = True or False
-    #   标签平滑  label_smoothing  = 0.01一般为0.01、0.005
+    # -----------------------------------------------------------------------------------#
+    #   Some tricks applications of Yolov4, this experiment is not used for the data set
+    #   mosaic =True or False
+    #   Cosine_scheduler = True or False
+    #   label_smoothing = 0.01 or 0.005
     # ------------------------------------------------------#
     mosaic = False
     Cosine_lr = False
@@ -193,25 +165,20 @@ if __name__ == "__main__":
     Unfreeze_batch_size = 4
     Unfreeze_lr = 1e-4
     # ------------------------------------------------------#
-    #   是否进行冻结训练
+    #  Whether to freeze training
     # ------------------------------------------------------#
     Freeze_Train = True
 
     num_workers = 8
-    # ----------------------------------------------------#
-    #   获得图片路径和标签
-    # ----------------------------------------------------#
+
     train_annotation_path = '2021_train.txt'
     val_annotation_path = '2021_val.txt'
 
-    # ----------------------------------------------------#
-    #   获取classes和anchor
-    # ----------------------------------------------------#
     class_names, num_classes = get_classes(classes_path)
     anchors, num_anchors = get_anchors(anchors_path)
 
     # ------------------------------------------------------#
-    #   创建模型
+    #   Create model
     # ------------------------------------------------------#
     model = YoloBody(anchors_mask, num_classes, backbone=backbone, pretrained=pretrained)
     if not pretrained:
@@ -236,16 +203,14 @@ if __name__ == "__main__":
     yolo_loss = YOLOLoss(anchors, num_classes, input_shape, Cuda, anchors_mask, label_smoothing)
     loss_history = LossHistory("logs/")
 
-    # ---------------------------#
-    #   读取数据集，格式为txt
-    # ---------------------------#
+
     with open(train_annotation_path) as f:
         train_lines = f.readlines()
     with open(val_annotation_path) as f:
         val_lines = f.readlines()
     num_train = len(train_lines)
     num_val = len(val_lines)
-    # --------------------查看模型----------------#
+    # --------------------Tensorboard Views the model----------------#
     if Tensorboard:
         from tensorboardX import SummaryWriter
 
@@ -281,10 +246,10 @@ if __name__ == "__main__":
         epoch_step_val = num_val // batch_size
 
         if epoch_step == 0 or epoch_step_val == 0:
-            raise ValueError("数据集过小，无法进行训练，请扩充数据集。")
+            raise ValueError("The dataset is too small for training, please expand the dataset.")
 
         # ------------------------------------#
-        #   冻结训练
+        #   Freeze training
         # ------------------------------------#
         if Freeze_Train:
             for param in model.backbone.parameters():
@@ -318,11 +283,9 @@ if __name__ == "__main__":
         epoch_step_val = num_val // batch_size
 
         if epoch_step == 0 or epoch_step_val == 0:
-            raise ValueError("数据集过小，无法进行训练，请扩充数据集。")
+            raise ValueError("The dataset is too small for training, please expand the dataset.")
 
-        # ------------------------------------#
-        #   冻结训练
-        # ------------------------------------#
+
         if Freeze_Train:
             for param in model.backbone.parameters():
                 param.requires_grad = True

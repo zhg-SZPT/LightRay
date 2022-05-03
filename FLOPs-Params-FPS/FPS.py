@@ -1,4 +1,3 @@
-#计算推理速度
 
 import torch
 import numpy as np
@@ -28,5 +27,7 @@ with torch.no_grad():
 mean_syn = np.sum(timings) / repetitions
 std_syn = np.std(timings)
 mean_fps = 1000. / mean_syn
-print(' * Mean@1 {mean_syn:.3f}ms Std@5 {std_syn:.3f}ms FPS@1 {mean_fps:.2f}'.format(mean_syn=mean_syn, std_syn=std_syn, mean_fps=mean_fps))
+print(' * Mean@1 {mean_syn:.3f}ms Std@5 {std_syn:.3f}ms FPS@1 {mean_fps:.2f}'.format(mean_syn=mean_syn,
+                                                                                     std_syn=std_syn,
+                                                                                     mean_fps=mean_fps))
 print(mean_syn)

@@ -43,8 +43,8 @@ def conv_dw(filter_in, filter_out, stride=1):
 
 
 # ---------------------------------------------------#
-#   SPP结构，利用不同大小的池化核进行池化
-#   池化后堆叠
+#   SPP structure, using pooling kernels of different sizes for pooling
+#   stack after pooling
 # ---------------------------------------------------#
 class SpatialPyramidPooling(nn.Module):
     def __init__(self, pool_sizes=[5, 9, 13]):
@@ -59,9 +59,6 @@ class SpatialPyramidPooling(nn.Module):
         return features
 
 
-# ---------------------------------------------------#
-#   卷积 + 上采样
-# ---------------------------------------------------#
 class Upsample(nn.Module):
     def __init__(self, in_channels, out_channels):
         super(Upsample, self).__init__()
@@ -76,9 +73,6 @@ class Upsample(nn.Module):
         return x
 
 
-# ---------------------------------------------------#
-#   三次卷积块
-# ---------------------------------------------------#
 def make_three_conv(filters_list, in_filters):
     m = nn.Sequential(
         conv2d(in_filters, filters_list[0], 1),
@@ -88,9 +82,7 @@ def make_three_conv(filters_list, in_filters):
     return m
 
 
-# ---------------------------------------------------#
-#   五次卷积块
-# ---------------------------------------------------#
+
 def make_five_conv(filters_list, in_filters):
     m = nn.Sequential(
         conv2d(in_filters, filters_list[0], 1),
@@ -102,9 +94,7 @@ def make_five_conv(filters_list, in_filters):
     return m
 
 
-# ---------------------------------------------------#
-#   最后获得yolov4的输出
-# ---------------------------------------------------#
+
 def yolo_head(filters_list, in_filters):
     m = nn.Sequential(
         conv_dw(in_filters, filters_list[0]),
@@ -151,7 +141,7 @@ class YoloBody(nn.Module):
             self.yolo_head1 = yolo_head([1024, len(anchors_mask[2]) * (5 + num_classes)], 512)
 
             self.conv_4_1 = nn.Conv2d(in_channels=40, out_channels=40, kernel_size=(3, 3),
-                                      stride=(4, 4))  # 为了降维，减少计算量，后加的卷积层
+                                      stride=(4, 4))
             self.lfpn = LightweightFeaturePyramidNet()
             self.cbam = CBAMBlock(channel=512)
             self.conv_4_2 = nn.Conv2d(in_channels=512, out_channels=512, kernel_size=(3, 3), stride=(4, 4))
@@ -162,7 +152,7 @@ class YoloBody(nn.Module):
         #  backbone
         x2, x1, x0 = self.backbone(x)
 
-        x3 = self.conv_4_1(x2)  #为了降维，减少计算量，后加的卷积层
+        x3 = self.conv_4_1(x2)
         x_lfpn = self.lfpn(x3)
         x_cbam = self.cbam(x_lfpn)
         x3 = self.bn4(x_cbam)
@@ -206,11 +196,8 @@ class YoloBody(nn.Module):
         # 13,13,1024 -> 13,13,512 -> 13,13,1024 -> 13,13,512 -> 13,13,1024 -> 13,13,512
         P5 = self.make_five_conv4(P5)
 
-        #   第三个特征层
         out2 = self.yolo_head3(P3)
-        #   第二个特征层
         out1 = self.yolo_head2(P4)
-        #   第一个特征层
         out0 = self.yolo_head1(P5 + x3)
 
         return out0, out1, out2,

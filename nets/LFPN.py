@@ -11,9 +11,7 @@ def conv2d(filter_in, filter_out, kernel_size, groups=1, stride=1):
         ("relu", nn.ReLU6(inplace=True)),
     ]))
 
-#-----------------------------------
-#   深度可分离卷积DSC=DW+PW
-#-----------------------------------
+# DSC=DW+PW
 def conv_dw(filter_in, filter_out, stride=1):
     return nn.Sequential(
         nn.Conv2d(filter_in, filter_in, 3, stride, 1, groups=filter_in, bias=False),
@@ -26,9 +24,6 @@ def conv_dw(filter_in, filter_out, stride=1):
     )
 
 
-# ---------------------------------------------------#
-#   SPP结构，利用不同大小的池化核进行池化固定输出大小 1，3，5，9
-# ---------------------------------------------------#
 class SpatialPyramidPooling(nn.Module):
     def __init__(self, pool_sizes=[5, 9, 13]):
         super(SpatialPyramidPooling, self).__init__()
@@ -56,10 +51,6 @@ class Upsample(nn.Module):
         x = self.upsample(x)
         return x
 
-# 我们的卷积块采用DSC与Conv交替的方式，即可保证精度也可减少计算，起到了平衡
-# ---------------------------------------------------#
-#   三次卷积块
-# ---------------------------------------------------#
 def make_three_conv(filters_list, in_filters):
     m = nn.Sequential(
         conv2d(in_filters, filters_list[0], 1),
@@ -68,10 +59,6 @@ def make_three_conv(filters_list, in_filters):
     )
     return m
 
-
-# ---------------------------------------------------#
-#   五次卷积块
-# ---------------------------------------------------#
 def make_five_conv(filters_list, in_filters):
     m = nn.Sequential(
         conv2d(in_filters, filters_list[0], 1),
@@ -94,7 +81,7 @@ def yolo_head(filters_list, in_filters):
 class LightweightFeaturePyramidNet(nn.Module):
     def __init__(self):
         super(LightweightFeaturePyramidNet, self).__init__()
-        in_filters = [40, 112, 160] #为了降维，减少计算量，加卷积层后的滤镜通道从40改到160
+        in_filters = [40, 112, 160]
 
         self.lfpn_conv1 = make_three_conv([512, 1024], in_filters[0])
         self.lfpn_SPP = SpatialPyramidPooling()
@@ -113,10 +100,9 @@ class LightweightFeaturePyramidNet(nn.Module):
         self.lfpn_make_five_conv4 = make_five_conv([512, 1024], 1024)
 
     def forward(self, x):
-        #  backbone 主干网络的维度变化
         # 13,13,1024 -> 13,13,512 -> 13,13,1024 -> 13,13,512 -> 13,13,2048
         P5 = self.lfpn_conv1(x)
-        P5 = self.lfpn_SPP(P5)  #经过SPP后将输入特征映射固定尺寸大小，这样的方式和resize有区别
+        P5 = self.lfpn_SPP(P5)
         # 13,13,2048 -> 13,13,512 -> 13,13,1024 -> 13,13,512
         P5 = self.lfpn_conv2(P5)
 
