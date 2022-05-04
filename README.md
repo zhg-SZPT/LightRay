@@ -42,7 +42,7 @@ cuda 11.2
   anchors_path = 'model_data/yolo_anchors.txt'
   ......
   model_path = 'model_data/LightRay.pth' 
-  (Note: LightRay.pth is the Pretrained weights of the SIXray dataset. yolov4_mobilenet_v3_voc.pth is the Pretrained weights of the voc dataset.)`
+  (Note: LightRay.pth is the Pretrained weights of the SIXray dataset. yolov4_mobilenet_v3_voc.pth is the Pretrained weights of the voc dataset.)
   ```
 4.train.py. After modifying the classes_path, you can run train.py to start training. After training multiple epochs, the weights will be generated in the logs folder.
 ## Evaluate (mAP)
@@ -63,7 +63,7 @@ cuda 11.2
   "model_path"        : 'model_data/ ',  
 
   "classes_path"      : 'model_data/xray_classes.txt',
-  (Note: This can be modified as needed.)
+  (Note: Other parameters can be modified as required.)
   ```
 3.After completing the modification, you can run predict.py for detection. After running, enter the image path to detect.
 ## Acknowledgement
