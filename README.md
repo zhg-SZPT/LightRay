@@ -66,4 +66,5 @@ cuda 11.2
   (Note: Other parameters can be modified as required.)
   ```
 3.Run predict.py. After completing the modification, you can run predict.py for detection. After running, enter the image path to detect.
+## Citation
 ## Acknowledgement
