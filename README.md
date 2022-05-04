@@ -54,7 +54,7 @@ cuda 11.2
   (Note: This can be modified as needed.)
   ```
 2.model_path points to the trained weights file in the logs folder(Select a trained weight you want under the logs file and put it in model_data/).<br>
-3.run mAP.py
+3.Run mAP.py
 ## Prediction
 1.Training result prediction requires two files, yolo.py and predict.py. Modify model_path and classes_path in yolo.py.<br>
 2.model_path points to the trained weights file in the logs folder(Select a trained weight you want under the logs file and put it in model_data/).
