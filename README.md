@@ -53,11 +53,11 @@ cuda 11.2
   "classes_path"      : 'model_data/xray_classes.txt',
   (Note: This can be modified as needed.)
   ```
-2.model_path points to the trained weights file in the logs folder(Select a trained weight you want under the logs file and put it in model_data/).<br>
-3.Run mAP.py
+2.model_path points to the trained weights file in the logs folder(Select a trained weight you want under the logs file and put it in model_data/ ).<br>
+3.Run mAP.py. The evaluation results are saved in the map_out folder.
 ## Prediction
 1.Training result prediction requires two files, yolo.py and predict.py. Modify model_path and classes_path in yolo.py.<br>
-2.model_path points to the trained weights file in the logs folder(Select a trained weight you want under the logs file and put it in model_data/).
+2.model_path points to the trained weights file in the logs folder(Select a trained weight you want under the logs file and put it in model_data/ ).
   classes_path points to the txt corresponding to the detection classes in yolo.py:
   ```python
   "model_path"        : 'model_data/ ',  
