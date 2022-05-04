@@ -65,5 +65,5 @@ cuda 11.2
   "classes_path"      : 'model_data/xray_classes.txt',
   (Note: Other parameters can be modified as required.)
   ```
-3.After completing the modification, you can run predict.py for detection. After running, enter the image path to detect.
+3.Run predict.py. After completing the modification, you can run predict.py for detection. After running, enter the image path to detect.
 ## Acknowledgement
