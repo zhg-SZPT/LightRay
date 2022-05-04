@@ -23,7 +23,7 @@ class YOLO(object):
         #   If there is a shape mismatch, pay attention to the modification of the model_path
         #   and classes_path parameters during training
         #--------------------------------------------------------------------------#
-        "model_path"        : 'model_data/ ',
+        "model_path"        : 'model_data/Epoch1-loss7.1539-val_loss5.9174.pth',
 
         "classes_path"      : 'model_data/xray_classes.txt',
 

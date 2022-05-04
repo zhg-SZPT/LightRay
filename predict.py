@@ -19,9 +19,10 @@ if __name__ == "__main__":
     #   'video' represents video detection, you can call the camera or video for detection;
     #   'fps' represents test fps;
     #   'dir_predict' represents that traverse the folder to detect and save.
+    #   'heatmap' represents a heatmap visualization of the prediction results.
     # ----------------------------------------------------------------------------------------------------------#
-    mode = "fps"
-    #   video_path = 0 表示检测摄像头
+    mode = "dir_predict"
+    #  video_path = 0 means to detect the camera
     video_path = 0
     video_save_path = ""
     video_fps = 25.0
@@ -31,8 +32,8 @@ if __name__ == "__main__":
     #   dir_save_path specifies the save path of the detected image
     #   dir_origin_path and dir_save_path are only available when mode='dir_predict'
     # -------------------------------------------------------------------------#
-    dir_origin_path = "xiaomubiao-in/"
-    dir_save_path = "xiaomubiao-out/"
+    dir_origin_path = "img_in/"
+    dir_save_path = "img-out/"
 
     if mode == "predict":
         import os

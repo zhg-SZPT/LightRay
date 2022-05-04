@@ -132,7 +132,7 @@ if __name__ == "__main__":
 
     Cuda = True
     # --------------------------------------------------------------------------------------------------------#
-    #   Before training classes_path, make it correspond to its own data set path as the target category class
+    #   Before training classes_path, make it correspond to its own dataset path as the target class
     # --------------------------------------------------------------------------------------------------------#
     classes_path = 'model_data/xray_classes.txt'
     anchors_path = 'model_data/yolo_anchors.txt'
@@ -140,7 +140,7 @@ if __name__ == "__main__":
     # -------------------------------------------------------------#
     #    Please modify the pretrained weight model when training
     # -------------------------------------------------------------#
-    model_path = 'model_data/LightRay.pth'
+    model_path = 'model_data/yolov4_mobilenet_v3_voc.pth'
 
     input_shape = [416, 416]
     backbone = "mobilenetv3"
@@ -162,7 +162,7 @@ if __name__ == "__main__":
     Freeze_lr = 1e-3
 
     UnFreeze_Epoch = 200
-    Unfreeze_batch_size = 4
+    Unfreeze_batch_size = 8
     Unfreeze_lr = 1e-4
     # ------------------------------------------------------#
     #  Whether to freeze training
