@@ -32,8 +32,7 @@ cuda 11.2
 ## Train
 1.The Pretrained weights required for training can be downloaded from Google Cloud Drive.<br>
   After downloading the library, unzip it, download LightRay.pth or yolov4_mobilenet_v3_voc.pth in Google Cloud Drive, and put it into model_data.<br>
-  Link: https://pan.baidu.com/s/1oXz13QwLx1lnXct538qL2Q <br>
-  Extraction code: 16qc <br>
+  Link: <https://drive.google.com/drive/folders/1kvPGOsXfVgRblXxB4sjB-wKBE42po3ya?usp=sharing><br>
 2.The default parameters of train.py are used to train the VOC dataset, and the training can be started directly by running train.py.<br>
   Before training classes_path, make it correspond to its own dataset path as the target class.<br>
 3.Modify parameters of train.py:
