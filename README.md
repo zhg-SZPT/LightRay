@@ -66,4 +66,16 @@ cuda 11.2
   ```
 3.Run predict.py. After completing the modification, you can run predict.py for detection. After running, enter the image path to detect.
 ## Citation
+If this work helps your research, please cite the following paper.
+  ```python
+@article{ren2022lightray,
+  title={LightRay: Lightweight network for prohibited items detection in X-ray images during security inspection},
+  author={Ren, Yu and Zhang, Haigang and Sun, Hongxing and Ma, Guanglin and Ren, Jin and Yang, Jinfeng},
+  journal={Computers and Electrical Engineering},
+  volume={103},
+  pages={108283},
+  year={2022},
+  publisher={Elsevier}
+}
+  ```
 ## Acknowledgement
